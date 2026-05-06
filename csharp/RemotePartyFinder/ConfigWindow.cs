@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
@@ -18,7 +17,7 @@ public class ConfigWindow : Window, IDisposable
 
     public ConfigWindow(Plugin plugin) : base("Remote Party Finder")
     {
-        _configuration = plugin.Configuration;
+        _configuration = plugin.CurrentConfiguration;
         Flags = ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.AlwaysAutoResize;
 
         Size = new Vector2(500, 0);
@@ -26,6 +25,7 @@ public class ConfigWindow : Window, IDisposable
 
     public void Dispose()
     {
+        GC.SuppressFinalize(this);
     }
 
     public override void OnClose()

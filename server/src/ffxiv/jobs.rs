@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 use crate::listing::JobFlags;
-use ffxiv_types::jobs::{Class, ClassJob, Job, NonCombatJob};
+use crate::ffxiv_types::jobs::{Class, ClassJob, Job, NonCombatJob};
 
 lazy_static::lazy_static! {
     pub static ref JOBS: HashMap<u32, ClassJob> = maplit::hashmap! {
@@ -46,6 +46,7 @@ lazy_static::lazy_static! {
         40 => ClassJob::Job(Job::Sage),
         41 => ClassJob::Job(Job::Viper),
         42 => ClassJob::Job(Job::Pictomancer),
+        43 => ClassJob::Job(Job::Beastmaster),
     };
 
     pub static ref JOBS_TO_FLAGS: HashMap<&'static str, JobFlags> = maplit::hashmap! {
@@ -80,5 +81,6 @@ lazy_static::lazy_static! {
         ClassJob::Job(Job::Sage).as_str() => JobFlags::SAGE,
         ClassJob::Job(Job::Viper).as_str() => JobFlags::VIPER,
         ClassJob::Job(Job::Pictomancer).as_str() => JobFlags::PICTOMANCER,
+        ClassJob::Job(Job::Beastmaster).as_str() => JobFlags::BEASTMASTER,
     };
 }

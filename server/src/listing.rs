@@ -1,14 +1,14 @@
 use std::borrow::Cow;
 
 use bitflags::bitflags;
-use ffxiv_types::jobs::{Class, ClassJob, Job};
-use ffxiv_types::{Role, World};
 use serde::{Deserialize, Serialize};
 use serde_repr::{Deserialize_repr, Serialize_repr};
 use sestring::SeString;
 
 use crate::ffxiv::jobs::JOBS_TO_FLAGS;
 use crate::ffxiv::{Language, LocalisedText, JOBS};
+use crate::ffxiv_types::jobs::{Class, ClassJob, Job};
+use crate::ffxiv_types::{Role, World};
 
 #[derive(Debug, Deserialize, Serialize, PartialEq)]
 pub struct PartyFinderListing {
@@ -73,7 +73,7 @@ impl PartyFinderListing {
         slots
     }
 
-    pub fn joinable_roles(&self) -> u32 {
+    pub fn joinable_roles(&self) -> u64 {
         let one_player_per_job = self
             .search_area
             .contains(SearchAreaFlags::ONE_PLAYER_PER_JOB);
@@ -290,9 +290,7 @@ impl DutyCategory {
             DutyCategory::GatheringForay => PartyFinderCategory::GatheringForays,
             DutyCategory::DeepDungeon => PartyFinderCategory::DeepDungeons,
             DutyCategory::FieldOperation => PartyFinderCategory::FieldOperations,
-            DutyCategory::VariantAndCriterionDungeon => {
-                PartyFinderCategory::VariantAndCriterionDungeonFinder
-            }
+            DutyCategory::VariantAndCriterionDungeon => PartyFinderCategory::VariantAndCriterionDungeonFinder
         }
     }
 }
@@ -325,10 +323,10 @@ bitflags! {
     #[derive(Deserialize, Serialize)]
     #[serde(transparent)]
     pub struct ObjectiveFlags : u32 {
-        const NONE = 0;
-        const DUTY_COMPLETION = 1 << 0;
-        const PRACTICE = 1 << 1;
-        const LOOT = 1 << 2;
+        const NONE = 1 << 0;
+        const DUTY_COMPLETION = 1 << 1;
+        const PRACTICE = 1 << 2;
+        const LOOT = 1 << 3;
     }
 }
 
@@ -367,7 +365,8 @@ bitflags! {
 bitflags! {
     #[derive(Deserialize, Serialize)]
     #[serde(transparent)]
-    pub struct SearchAreaFlags : u32 {
+    pub struct SearchAreaFlags : u8 {
+        const NONE = 0;
         const DATA_CENTRE = 1 << 0;
         const PRIVATE = 1 << 1;
         const ALLIANCE_RAID = 1 << 2;
@@ -379,7 +378,7 @@ bitflags! {
 bitflags! {
     #[derive(Deserialize, Serialize)]
     #[serde(transparent)]
-    pub struct JobFlags : u32 {
+    pub struct JobFlags : u64 {
         const GLADIATOR = 1 << 1;
         const PUGILIST = 1 << 2;
         const MARAUDER = 1 << 3;
@@ -411,6 +410,7 @@ bitflags! {
         const SAGE = 1 << 29;
         const VIPER = 1 << 30;
         const PICTOMANCER = 1 << 31;
+        const BEASTMASTER = 1 << 32;
     }
 }
 
@@ -542,6 +542,10 @@ impl JobFlags {
             cjs.push(ClassJob::Job(Job::Pictomancer));
         }
 
+        if self.contains(Self::BEASTMASTER) {
+            cjs.push(ClassJob::Job(Job::Beastmaster));
+        }
+
         cjs
     }
 
@@ -612,6 +616,7 @@ impl JobFlags {
                     Self::SAMURAI,
                     Self::REAPER,
                     Self::VIPER,
+                    Self::BEASTMASTER,
                 ],
             ),
             (

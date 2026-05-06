@@ -55,8 +55,9 @@ internal class Gatherer : IDisposable {
                     .Select(listing => new UploadableListing(listing))
                     .ToList();
                 var json = JsonConvert.SerializeObject(uploadable);
+                Plugin.Log.Verbose(JsonConvert.SerializeObject(uploadable), Formatting.Indented);
 
-                foreach (var uploadUrl in Plugin.Configuration.UploadUrls.Where(uploadUrl => uploadUrl.IsEnabled))
+                foreach (var uploadUrl in Plugin.CurrentConfiguration.UploadUrls.Where(uploadUrl => uploadUrl.IsEnabled))
                 {
                     var resp = await this.Client.PostAsync(uploadUrl.Url, new StringContent(json) {
                         Headers = { ContentType = MediaTypeHeaderValue.Parse("application/json") },

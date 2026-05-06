@@ -167,6 +167,14 @@ pub fn duty_name<'a>(
                 Language::French => "Eurêka Orthos",
             })
         }
+        (DutyType::Other, DutyCategory::DeepDungeon) if duty == 4 => {
+            return Cow::from(match lang {
+                Language::English => "Pilgrim's Traverse",
+                Language::Japanese => "ピルグリム・トラバース",
+                Language::German => "Pilgers Pfad",
+                Language::French => "Le Sanctuaire des pèlerins",
+            })
+        }
         (DutyType::Normal, _) => {
             if let Some(info) = crate::ffxiv::duty(u32::from(duty)) {
                 return Cow::from(info.name.text(&lang));

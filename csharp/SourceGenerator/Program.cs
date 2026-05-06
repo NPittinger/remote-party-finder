@@ -226,7 +226,7 @@ internal class Program
     {
         var sb = DefaultHeader();
         sb.Append("use crate::listing::JobFlags;\n");
-        sb.Append("use ffxiv_types::jobs::{Class, ClassJob, Job, NonCombatJob};\n\n");
+        sb.Append("use crate::ffxiv_types::jobs::{Class, ClassJob, Job, NonCombatJob};\n\n");
         sb.Append("lazy_static::lazy_static! {\n");
         sb.Append("    pub static ref JOBS: HashMap<u32, ClassJob> = maplit::hashmap! {\n");
 
@@ -436,7 +436,7 @@ internal class Program
     private string GenerateWorlds()
     {
         var sb = DefaultHeader();
-        sb.Append("use ffxiv_types::World;\n\n");
+        sb.Append("use crate::ffxiv_types::World;\n\n");
         sb.Append("lazy_static::lazy_static! {\n");
         sb.Append("    pub static ref WORLDS: HashMap<u32, World> = maplit::hashmap! {\n");
 

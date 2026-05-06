@@ -2,6 +2,7 @@
 using Dalamud.Interface.Windowing;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
+using System;
 
 namespace RemotePartyFinder;
 
@@ -17,14 +18,19 @@ public class Plugin : IDalamudPlugin {
     [PluginService]
     internal IPartyFinderGui PartyFinderGui { get; private init; }
 
-    public Configuration Configuration { get; init; }
+    public Configuration CurrentConfiguration { get; init; }
     public readonly WindowSystem WindowSystem = new("Remote Party Finder");
     private ConfigWindow ConfigWindow { get; init; }
 
     private Gatherer Gatherer { get; }
 
     public Plugin() {
-        Configuration = PluginInterface.GetPluginConfig() as Configuration ?? new Configuration();
+        CurrentConfiguration = PluginInterface.GetPluginConfig() as Configuration ?? new Configuration();
+        if (CurrentConfiguration.Version < Configuration.CurrentVersion)
+        {
+            CurrentConfiguration.Migrate();
+        }
+
         this.Gatherer = new Gatherer(this);
         ConfigWindow = new ConfigWindow(this);
         WindowSystem.AddWindow(ConfigWindow);
@@ -36,6 +42,7 @@ public class Plugin : IDalamudPlugin {
         this.Gatherer.Dispose();
         WindowSystem.RemoveAllWindows();
         ConfigWindow.Dispose();
+        GC.SuppressFinalize(this);
     }
 
     public void DrawUI() => WindowSystem.Draw();

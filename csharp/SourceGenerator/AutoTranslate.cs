@@ -70,31 +70,18 @@ internal static class AutoTranslate {
 internal interface ISelectorPart {
 }
 
-internal class SingleRow : ISelectorPart {
-    public uint Row { get; }
-
-    public SingleRow(uint row) {
-        this.Row = row;
-    }
+internal class SingleRow(uint row) : ISelectorPart {
+    public uint Row { get; } = row;
 }
 
-internal class IndexRange : ISelectorPart {
-    public uint Start { get; }
-    public uint End { get; }
-
-    public IndexRange(uint start, uint end) {
-        this.Start = start;
-        this.End = end;
-    }
+internal class IndexRange(uint start, uint end) : ISelectorPart {
+    public uint Start { get; } = start;
+    public uint End { get; } = end;
 }
 
 internal class NounMarker : ISelectorPart {
 }
 
-internal class ColumnSpecifier : ISelectorPart {
-    public uint Column { get; }
-
-    public ColumnSpecifier(uint column) {
-        this.Column = column;
-    }
+internal class ColumnSpecifier(uint column) : ISelectorPart {
+    public uint Column { get; } = column;
 }

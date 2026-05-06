@@ -1,5 +1,4 @@
 #![feature(try_blocks, iter_intersperse)]
-#![feature(let_chains)]
 
 use crate::config::Config;
 use anyhow::Context;
@@ -11,7 +10,6 @@ use tokio::io::AsyncReadExt;
 
 mod base64_sestring;
 mod config;
-mod ffxiv;
 mod listing;
 mod listing_container;
 mod sestring_ext;
@@ -19,6 +17,9 @@ mod stats;
 mod template;
 mod web;
 mod ws;
+
+mod ffxiv;
+mod ffxiv_types;
 
 mod api;
 mod mongo;

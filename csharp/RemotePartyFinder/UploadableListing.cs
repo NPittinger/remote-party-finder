@@ -10,7 +10,7 @@ namespace RemotePartyFinder;
 [Serializable]
 [JsonObject(NamingStrategyType = typeof(SnakeCaseNamingStrategy))]
 internal class UploadableListing {
-    public uint Id { get; }
+    public ulong Id { get; }
     public uint ContentIdLower { get; } // to retain backwards compatibility with old listings (stats), we stick to the lower bits
     public byte[] Name { get; }
     public byte[] Description { get; }
@@ -50,23 +50,23 @@ internal class UploadableListing {
         this.MinItemLevel = listing.MinimumItemLevel;
         this.NumParties = listing.Parties;
         this.SlotsAvailable = listing.SlotsAvailable;
-        this.LastServerRestart = listing.LastPatchHotfixTimestamp;
+        this.LastServerRestart = (uint)listing.LastPatchHotfixTimestamp;
         this.Objective = listing.Objective;
         this.Conditions = listing.Conditions;
         this.DutyFinderSettings = listing.DutyFinderSettings;
         this.LootRules = listing.LootRules;
         this.SearchArea = listing.SearchArea;
-        this.Slots = listing.Slots.Select(slot => new UploadableSlot(slot)).ToList();
-        this.JobsPresent = listing.RawJobsPresent.ToList();
+        this.Slots = [.. listing.Slots.Select(slot => new UploadableSlot(slot))];
+        this.JobsPresent = [.. listing.RawJobsPresent];
     }
 }
 
 [Serializable]
 [JsonObject(NamingStrategyType = typeof(SnakeCaseNamingStrategy))]
 internal class UploadableSlot {
-    public uint Accepting { get; } // TODO: JobFlags should : uint
+    public ulong Accepting { get; }
 
     internal UploadableSlot(PartyFinderSlot slot) {
-        this.Accepting = slot.Accepting.Aggregate((uint)0, (agg, flag) => agg | (uint)flag);
+        this.Accepting = slot.Accepting.Aggregate((ulong)0, (agg, flag) => agg | (ulong)flag);
     }
 }
